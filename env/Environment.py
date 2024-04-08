@@ -41,11 +41,11 @@ class Environment():
         Return next_state, observation and terminal
         '''
         deltaV = self.params["setup"]["actions"][int(action_idx)]
-        print(deltaV)
+        #print(deltaV)
         self.run_args = self._call + self._args + self.populate_call_arguments(deltaV) # This should only be the deltaV argument
             
         # Note : phi = 180 if action value is neg else 0
-        print("Starting")
+        #print("Starting")
         try :
             with subprocess.Popen(self.run_args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True) as process:
                 log = process.communicate(timeout=200)[0]
@@ -93,7 +93,7 @@ class Environment():
         obs.append((date - datetime.datetime(2001,1,1,0,0,1).timestamp())/datetime.datetime(2003,1,1,0,0,1).timestamp())
         obs.append((self.state["passage_time"]-400)/1200)
         obs.append((self.state["apoapsis_radius"]-self.target_apoapsis_radius)/(10038000 - self.target_apoapsis_radius))
-        obs.append((self.state["periapsis_altitude"] - 85000)/(94000 - 85000))
+        obs.append((self.state["periapsis_altitude"] - 85000)/(135000 - 85000))
         obs.append((self.state["inclination"] - 79)/(100-79))
         obs.append((self.state["AOP"])/360)
         obs.append((self.state["RAAN"]-90)/(180-90))

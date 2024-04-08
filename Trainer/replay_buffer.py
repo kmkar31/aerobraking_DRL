@@ -22,7 +22,7 @@ class ReplayBuffer():
             self.next_observations = np.atleast_2d(next_obs)
             self.terminals = np.atleast_1d(terminals)
 
-        print(self.observations, self.actions)
+        #print(self.observations, self.actions)
 
     def sample(self, indices):
         return self.observations[indices, :], self.actions[indices], self.rewards[indices], self.next_observations[indices, :], self.terminals[indices]

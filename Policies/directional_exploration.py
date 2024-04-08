@@ -28,3 +28,6 @@ class DirectionalExploration():
             action = np.argmax(Q_s_a).squeeze()
 
         return action
+    
+    def get_max_action(self, Q_s_a):
+        return np.argmax(Q_s_a).squeeze()
