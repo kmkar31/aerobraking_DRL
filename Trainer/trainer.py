@@ -70,7 +70,7 @@ class Trainer():
             tasks = [executor.submit(self.evaluate_episode) for i in range(self.eval_episodes)]
             wait(tasks)
         '''
-        
+        reward_list = np.zeros(self.eval_episodes)
         for episode in range(self.eval_episodes):
             print("Episode, ",episode)
             obs = self.env.reset()
