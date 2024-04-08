@@ -1,6 +1,6 @@
 setup:
   observation_dim : 9
-  action_dim : 13
+  action_dim : 11
   DDQN : True
   actions : [-1.0, -0.5, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.5, 1.0]
   state_headers : ["date", 
@@ -28,7 +28,7 @@ neural_network:
   learning_rate : 0.0005
 
 training:
-  train_start_steps : 500 # Training starts only after 500 steps have been taken
+  train_start_steps : 3 # Training starts only after 500 steps have been taken
   train_stop_steps : 300000 # Training stops once 300,000 steps have been taken
   buffer_size : 20000 # Buffer only stores that latest 20,000 steps
   train_frequency : 3 # Training occurs once every three steps

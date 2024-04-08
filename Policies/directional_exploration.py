@@ -14,19 +14,17 @@ class DirectionalExploration():
         return np.exp(-env_step_number/self.decay_rate)
     
 
-    def get_action(self, env_step_number, obs, Q_s_a):
-        actions = []
-        
-        for (i,ob) in enumerate(obs):
-            p = np.random.random()
-            if p < self.get_current_epsilon(env_step_number):
-                if ob[7] < 0.1:
-                    actions.append(np.random.randint(self.action_dim//2+1, self.action_dim))
-                elif ob[7] > 0.25:
-                    actions.append(np.random.randint(0,self.action_dim//2))
-                else:
-                    actions.append(np.random.randint(0, self.action_dim))
+    def get_action(self, env_step_number, ob, Q_s_a):
+        action = None
+        p = np.random.random()
+        if p < self.get_current_epsilon(env_step_number):
+            if ob[7] < 0.1:
+                action = np.random.randint(self.action_dim//2+1, self.action_dim)
+            elif ob[7] > 0.25:
+                action = np.random.randint(0,self.action_dim//2)
             else:
-                actions.append(np.argmax(Q_s_a[i,:]))
+                action = np.random.randint(0, self.action_dim)
+        else:
+            action = np.argmax(Q_s_a).squeeze()
 
-        return actions
+        return action

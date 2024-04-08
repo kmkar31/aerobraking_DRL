@@ -2,7 +2,7 @@ import numpy as np
 from Policies.directional_exploration import DirectionalExploration
 
 class Trainer():
-    def __init__(self, params, env, agent, init_state):
+    def __init__(self, params, env, agent, init_obs):
         self.params = params
 
         self.training_start = self.params['training']['train_start_steps']
@@ -17,10 +17,10 @@ class Trainer():
         self.train_steps = 0
         self.env = env
 
-        self.replay_buffer = dict(zip(['States', 'Actions', 'Rewards', 'Next_States', 'Terminals'], [[],[],[],[], []]))
+        self.replay_buffer = dict(zip(['Observations', 'Actions', 'Rewards', 'Next_Observations', 'Terminals'], [[],[],[],[], []]))
 
         self.dqn_agent = agent
-        self.state = init_state
+        self.obs = init_obs
         self.action = None
         self.reward = 0
         self.next_state = None
@@ -35,25 +35,26 @@ class Trainer():
 
             if self.train_steps >= self.training_start:
                 self.train = True
-
+            print(self.train_steps)
             # Get action according to epsilon-greedy
-            self.action = self.policy.get_action(self.train_steps, self.state, self.dqn_agent.output(self.mask(self.state)))
-            self.reward, self.next_state, self.terminal = self.env.step(self.state, self.action)
-
+            self.action = self.policy.get_action(self.train_steps, self.obs, self.dqn_agent.output(self.obs))
+            print(self.action)
+            self.reward, self.next_obs, self.terminal = self.env.step(self.action)
+            print(self.reward, self.next_obs, self.terminal)
             # Add to replay buffer
-            self.replay_buffer['States'].append(self.state)
+            self.replay_buffer['Observations'].append(self.obs)
             self.replay_buffer['Actions'].append(self.action)
             self.replay_buffer['Rewards'].append(self.reward)
-            self.replay_buffer['Next_States'].append(self.next_state)
+            self.replay_buffer['Next_Observations'].append(self.next_obs)
             self.replay_buffer['Terminals'].append(self.terminal)
 
-            self.state = self.next_state if not self.terminal else self.env_reset()
+            self.obs = self.next_obs if not self.terminal else self.env_reset()
 
             if self.train:
                 if self.train_steps % self.train_frequency == 0:
                     # Sample from replay buffer
-                    states, actions, rewards, next_states, terminals = self.sample()
-                    log = self.dqn_agent.update(states, actions, rewards, next_states, terminals)
+                    obs, actions, rewards, next_obs, terminals = self.sample()
+                    log = self.dqn_agent.update(obs, actions, rewards, next_obs, terminals)
                     self.log(log)
                 
                 if self.train_steps % self.eval_frequency:
@@ -67,29 +68,24 @@ class Trainer():
         # TODO
 
 
-    def unmask(self, state):
-        '''
-            Converts a list State to a dictionary State
-        '''
-        return self.env.unmask(state)
-
     def sample(self):
-        indices = np.random.permutation(len(self.replay_buffer['States']))[:self.batch_size]
-        states = self.replay_buffer['States'][indices]
+        indices = np.random.permutation(len(self.replay_buffer['Observations']))[:self.batch_size]
+        print(indices)
+        obs = self.replay_buffer['Observations'][indices]
         actions = self.replay_buffer['Actions'][indices]
         rewards = self.replay_buffer['Rewards'][indices]
-        next_states = self.replay_buffer['Next_States'][indices]
+        next_obs = self.replay_buffer['Next_Observations'][indices]
         terminals = self.replay_buffer['Terminals'][indices]
 
-        return states, actions, rewards, next_states, terminals
+        return obs, actions, rewards, next_obs, terminals
     
-    def log(self):
+    def log(self, msg):
         # TODO
-        pass
+        print(msg)
 
     def env_reset(self):
-        state = self.env.reset()
-        return state
+        obs = self.env.reset()
+        return obs
             
 
             

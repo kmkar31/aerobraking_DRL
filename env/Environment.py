@@ -31,8 +31,8 @@ class Environment():
                       "--month", str(12),
                       "--final_apoapsis_radius", str(self.params["environment"]["apoapsis_radius_target"]),
                       "--density_model", "Exponential"]
-
         self.state = None
+        _ = self.populate_call_arguments(0)
 
         
 
@@ -77,6 +77,9 @@ class Environment():
         '''
         self.state = None
         _ = self.populate_call_arguments(0)
+        return self.mask()
+    
+    def get_observation(self):
         return self.mask()
 
     def mask(self):

@@ -82,6 +82,9 @@ class DQN():
                 self.target_q_net.parameters(), self.q_net.parameters()
         ):
             target_param.data.copy_(param.data)
+    
+    def output(self, obs):
+        return self.q_net(torch.tensor(obs).to(torch.float32)).detach().numpy()
 
 
 
