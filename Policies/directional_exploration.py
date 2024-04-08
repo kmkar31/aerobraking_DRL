@@ -18,9 +18,9 @@ class DirectionalExploration():
         action = None
         p = np.random.random()
         if p < self.get_current_epsilon(env_step_number):
-            if ob[7] < 0.1:
+            if ob[7] < 0.25:
                 action = np.random.randint(self.action_dim//2+1, self.action_dim)
-            elif ob[7] > 0.25:
+            elif ob[7] > 0.75:
                 action = np.random.randint(0,self.action_dim//2)
             else:
                 action = np.random.randint(0, self.action_dim)

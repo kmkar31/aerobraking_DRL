@@ -28,13 +28,13 @@ neural_network:
   learning_rate : 0.0005
 
 training:
-  train_start_steps : 3 # Training starts only after 500 steps have been taken
+  train_start_steps : 2 # Training starts only after 500 steps have been taken
   train_stop_steps : 300000 # Training stops once 300,000 steps have been taken
   buffer_size : 20000 # Buffer only stores that latest 20,000 steps
   train_frequency : 3 # Training occurs once every three steps
   eval_episodes : 40 # Evaluate over 40 episodes
   eval_frequency : 5000 # Evaluate policy every 5,000 environment steps
-  batch_size : 128
+  batch_size : 2
 
 environment:
   apoapsis_radius_initial : 10038000

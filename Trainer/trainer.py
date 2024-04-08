@@ -1,5 +1,6 @@
 import numpy as np
 from Policies.directional_exploration import DirectionalExploration
+from replay_buffer import ReplayBuffer
 
 class Trainer():
     def __init__(self, params, env, agent, init_obs):
@@ -17,7 +18,7 @@ class Trainer():
         self.train_steps = 0
         self.env = env
 
-        self.replay_buffer = dict(zip(['Observations', 'Actions', 'Rewards', 'Next_Observations', 'Terminals'], [[],[],[],[], []]))
+        self.replay_buffer = []
 
         self.dqn_agent = agent
         self.obs = init_obs
@@ -27,6 +28,8 @@ class Trainer():
         self.terminal = None
 
         self.policy = DirectionalExploration(self.params)
+
+        self.replay_buffer = ReplayBuffer()
 
 
     def training_loop(self):
@@ -42,11 +45,7 @@ class Trainer():
             self.reward, self.next_obs, self.terminal = self.env.step(self.action)
             print(self.reward, self.next_obs, self.terminal)
             # Add to replay buffer
-            self.replay_buffer['Observations'].append(self.obs)
-            self.replay_buffer['Actions'].append(self.action)
-            self.replay_buffer['Rewards'].append(self.reward)
-            self.replay_buffer['Next_Observations'].append(self.next_obs)
-            self.replay_buffer['Terminals'].append(self.terminal)
+            self.replay_buffer.append(self.obs, self.action, self.reward, self.next_obs, self.terminal)
 
             self.obs = self.next_obs if not self.terminal else self.env_reset()
 
@@ -54,6 +53,7 @@ class Trainer():
                 if self.train_steps % self.train_frequency == 0:
                     # Sample from replay buffer
                     obs, actions, rewards, next_obs, terminals = self.sample()
+                    print(obs, actions, rewards, next_obs, terminals)
                     log = self.dqn_agent.update(obs, actions, rewards, next_obs, terminals)
                     self.log(log)
                 
@@ -62,22 +62,20 @@ class Trainer():
 
     
     def eval(self):
+        pass
+        '''
         num_episodes = 0
+
         while num_episodes < self.eval_episodes:
             pass
         # TODO
+        '''
 
 
     def sample(self):
-        indices = np.random.permutation(len(self.replay_buffer['Observations']))[:self.batch_size]
+        indices = np.random.permutation(self.replay_buffer._length())[:self.batch_size]
         print(indices)
-        obs = self.replay_buffer['Observations'][indices]
-        actions = self.replay_buffer['Actions'][indices]
-        rewards = self.replay_buffer['Rewards'][indices]
-        next_obs = self.replay_buffer['Next_Observations'][indices]
-        terminals = self.replay_buffer['Terminals'][indices]
-
-        return obs, actions, rewards, next_obs, terminals
+        return self.replay_buffer.sample(indices)
     
     def log(self, msg):
         # TODO
