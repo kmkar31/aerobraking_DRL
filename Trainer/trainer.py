@@ -2,7 +2,7 @@ import numpy as np
 from Policies.directional_exploration import DirectionalExploration
 from replay_buffer import ReplayBuffer
 from env.Environment import Environment
-from concurrent.futures import ProcessPoolExecutor, wait
+from loky import ProcessPoolExecutor
 
 class Trainer():
     def __init__(self, params, env, agent, init_obs):
@@ -35,6 +35,8 @@ class Trainer():
 
 
     def training_loop(self):
+        self.collect_initial_data()
+        '''
         while self.train_steps <= self.training_stop:
             self.train_steps += 1
 
@@ -61,7 +63,8 @@ class Trainer():
                 
                 if self.train_steps % self.eval_frequency:
                     self.eval()
-
+        '''
+        self.replay_buffer.save()
     
     def eval(self):
         print("Evaluating Current Policy over 40 Episodes")
@@ -110,7 +113,34 @@ class Trainer():
             discounted_reward = discounted_reward*self.params["policies"]["discount_rate"]*(1-terminal) + reward
         
         return discounted_reward
+    
+    def collect_initial_data(self):
+        train_steps = 0
+        with ProcessPoolExecutor() as executor:
+            while train_steps <= self.training_start:
+                jobs = [executor.submit(self.trainer) for i in range(20)]
+                train_steps += sum([job.result()[0] for job in jobs])
+                for job in jobs:
+                    buffer_op = job.result()[1].sample([i for i in range(job.result()[1]._length())])
+                    #print(buffer_op)
+                    self.replay_buffer.append(*buffer_op)
+                print(train_steps)
+            
 
+    def trainer(self):
+        terminal = 0
+        train_steps = 0
+        env = Environment(self.params)
+        obs = env.reset()
+        buffer = ReplayBuffer()
+        while terminal != 1:
+            action = self.policy.get_action(train_steps, obs, self.dqn_agent.output(obs))
+            reward, next_obs, terminal = env.step(action)
+            #print(obs, action, reward, next_obs, terminal)
+            buffer.append(obs, action, reward, next_obs, terminal)
+            obs = next_obs if not terminal else env.reset()
+            train_steps += 1
+        return train_steps, buffer
 
             
 

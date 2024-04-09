@@ -1,4 +1,5 @@
 import numpy as np
+import csv
 
 class ReplayBuffer():
     def __init__(self):
@@ -29,3 +30,7 @@ class ReplayBuffer():
     
     def _length(self):
         return len(self.actions)
+    
+    def save(self):
+        np.savetxt('data_500.csv', np.concatenate((self.observations, np.atleast_2d(self.actions).T, np.atleast_2d(self.rewards).T, self.next_observations, np.atleast_2d(self.terminals).T), axis=1))
+

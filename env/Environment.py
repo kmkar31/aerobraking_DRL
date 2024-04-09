@@ -119,21 +119,22 @@ class Environment():
         '''
         Use the ranges given in the paper to generate an initial state
         '''
+        np.random.seed()
         if self.state is None:
             self.state = dict()
-            self.state["apoapsis_radius"] = np.random.uniform(self.params["environment"]["apoapsis_radius_initial"]-self.params["environment"]["apoapsis_radius_dispersion"], \
-                                                            self.params["environment"]["apoapsis_radius_initial"]+self.params["environment"]["apoapsis_radius_dispersion"])
-            self.state["periapsis_altitude"] = np.random.uniform(self.params["environment"]["periapsis_altitude_initial"]-self.params["environment"]["periapsis_altitude_dispersion"], \
+            self.state["apoapsis_radius"] = np.random.RandomState().uniform(self.params["environment"]["apoapsis_radius_initial"]-self.params["environment"]["apoapsis_radius_dispersion"], \
+                                                            self.params["environment"]["apoapsis_radius_initial"]+self.params["environment"]["apoapsis_radius_dispersion"],)
+            self.state["periapsis_altitude"] = np.random.RandomState().uniform(self.params["environment"]["periapsis_altitude_initial"]-self.params["environment"]["periapsis_altitude_dispersion"], \
                                                             self.params["environment"]["periapsis_altitude_initial"]+self.params["environment"]["periapsis_altitude_dispersion"])
-            self.state["inclination"] = np.random.uniform(self.params["environment"]["inclination_low"], self.params["environment"]["inclination_high"])
-            self.state["AOP"] = np.random.uniform(self.params["environment"]["aop_low"], self.params["environment"]["aop_high"])
-            self.state["RAAN"] = np.random.uniform(self.params["environment"]["raan_low"], self.params["environment"]["raan_high"])
+            self.state["inclination"] = np.random.RandomState().uniform(self.params["environment"]["inclination_low"], self.params["environment"]["inclination_high"])
+            self.state["AOP"] = np.random.RandomState().uniform(self.params["environment"]["aop_low"], self.params["environment"]["aop_high"])
+            self.state["RAAN"] = np.random.RandomState().uniform(self.params["environment"]["raan_low"], self.params["environment"]["raan_high"])
             self.state["year"] = 2001
             self.state["month"] = 12
-            self.state["day"] = np.random.randint(1, 31)
-            self.state["hour"] = np.random.randint(0, 23)
-            self.state["min"] = np.random.randint(0, 59)
-            self.state["second"] = np.random.randint(0, 59)
+            self.state["day"] = np.random.RandomState().randint(1, 31)
+            self.state["hour"] = np.random.RandomState().randint(0, 23)
+            self.state["min"] = np.random.RandomState().randint(0, 59)
+            self.state["second"] = np.random.RandomState().randint(0, 59)
             self.state["passage_time"] = 0
             self.state["max_air_density"] = 0
             self.state["max_heat_rate"] = 0
