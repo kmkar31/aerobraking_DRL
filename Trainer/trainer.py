@@ -124,6 +124,7 @@ class Trainer():
                     buffer_op = job.result()[1].sample([i for i in range(job.result()[1]._length())])
                     #print(buffer_op)
                     self.replay_buffer.append(*buffer_op)
+                self.replay_buffer.save()
                 print(train_steps)
             
 
@@ -134,7 +135,7 @@ class Trainer():
         obs = env.reset()
         buffer = ReplayBuffer()
         while terminal != 1:
-            action = self.policy.get_action(train_steps, obs, self.dqn_agent.output(obs))
+            action = np.random.randint(0,11) #self.policy.get_action(train_steps, obs, self.dqn_agent.output(obs))
             reward, next_obs, terminal = env.step(action)
             #print(obs, action, reward, next_obs, terminal)
             buffer.append(obs, action, reward, next_obs, terminal)

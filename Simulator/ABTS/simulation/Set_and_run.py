@@ -20,7 +20,6 @@ from datetime import *
 import os
 from utils.save_cvs import *
 import time
-import datetime
 
 def aeroraking_campaign(args,state):
 
@@ -203,31 +202,29 @@ def aeroraking_campaign(args,state):
     #############################################
 
     if args.print_res:
-        print('apoapsis_radius:', (cnf.solution.orientation.oe[0][-1] * (1 + cnf.solution.orientation.oe[1][-1])))
-        print('periapsis_altitude:', cnf.solution.orientation.oe[0][-1] * (1 - cnf.solution.orientation.oe[1][-1]) - m.planet.Rp_e)
-        print('max_air_density:',max(cnf.solution.physical_properties.rho))
-        print('max_heat_rate:',max(cnf.solution.performance.heat_rate))
-        print('inclination:', cnf.solution.orientation.oe[2][-1]*(180/np.pi))
-        print('RAAN:', cnf.solution.orientation.oe[3][-1]*(180/np.pi))
-        print("AOP:", cnf.solution.orientation.oe[4][-1]*(180/np.pi))
-        print('nu:', cnf.solution.orientation.oe[5][-1]*(180/np.pi))
-        
         dp = np.where(np.array(cnf.solution.simulation.drag_passage) == 1)[0]
         dp_start = dp[0]
         dp_end = dp[-1]
-        print('passage_time: ', cnf.solution.orientation.time[dp_end] - cnf.solution.orientation.time[dp_start])
-        print('year:', cnf.solution.orientation.year[-1])
-        print('month:', cnf.solution.orientation.month[-1])
-        print('day:', cnf.solution.orientation.day[-1])
-        print('hour:', cnf.solution.orientation.hour[-1])
-        print('min:', cnf.solution.orientation.min[-1])
-        print('second:',cnf.solution.orientation.second[-1])
+        print((cnf.solution.orientation.oe[0][-1] * (1 + cnf.solution.orientation.oe[1][-1])),
+        cnf.solution.orientation.oe[0][-1] * (1 - cnf.solution.orientation.oe[1][-1]) - m.planet.Rp_e,
+        cnf.solution.orientation.oe[2][-1]*(180/np.pi),
+        cnf.solution.orientation.oe[3][-1]*(180/np.pi),
+        cnf.solution.orientation.oe[4][-1]*(180/np.pi),
+        max(cnf.solution.physical_properties.rho),
+        max(cnf.solution.performance.heat_rate),
+        cnf.solution.orientation.time[dp_end] - cnf.solution.orientation.time[dp_start],
+        cnf.solution.orientation.year[-1],
+        cnf.solution.orientation.month[-1],
+        cnf.solution.orientation.day[-1],
+        cnf.solution.orientation.hour[-1],
+        cnf.solution.orientation.min[-1],
+        cnf.solution.orientation.second[-1])
         
 
 
     # Save results
     if save_res == 1:
-        now = datetime.now()
+        #now = datetime.now()
         if args.filename == 1:
 
             if args.montecarlo == True:
@@ -246,8 +243,8 @@ def aeroraking_campaign(args,state):
         if not os.path.exists(os.path.dirname(filename)):
             os.makedirs(os.path.dirname(filename))
         save_cvs(filename,args)
-    if args.print_res:
-        print('Elapsed Time :', elapsed)
+    #if args.print_res:
+        #print('Elapsed Time :', elapsed)
 
     if args.plot == True:
         from utils.plots import plots

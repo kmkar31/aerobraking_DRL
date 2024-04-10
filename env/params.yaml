@@ -37,7 +37,7 @@ training:
   batch_size : 128 #
 
 environment:
-  apoapsis_radius_initial : 10038000
+  apoapsis_radius_initial : 7038000
   apoapsis_radius_target : 4096000
   periapsis_altitude_initial : 92000
   apoapsis_radius_dispersion : 2500

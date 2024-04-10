@@ -32,5 +32,5 @@ class ReplayBuffer():
         return len(self.actions)
     
     def save(self):
-        np.savetxt('data_500.csv', np.concatenate((self.observations, np.atleast_2d(self.actions).T, np.atleast_2d(self.rewards).T, self.next_observations, np.atleast_2d(self.terminals).T), axis=1))
+        np.savetxt('data_1000.csv', np.concatenate((self.observations, np.atleast_2d(self.actions).T, np.atleast_2d(self.rewards).T, self.next_observations, np.atleast_2d(self.terminals).T), axis=1))
 

@@ -66,7 +66,7 @@ def def_miss(args):
         args.directory_MarsGram = '/Users/Giusy/MarsGram/'
     elif args.machine == 'Laptop':
         if not args.directory_results:
-            args.directory_results = '/Users/Josephine/Aerobraking/Aerobraking_SA_project_results/'
+            args.directory_results = '/'
         args.directory_MarsGram = '/Users/Josephine/Aerobraking/MarsGram/'
 
     if args.density_model == 'MarsGram' and args.planet != 1:
