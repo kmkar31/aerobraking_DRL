@@ -36,6 +36,16 @@ training:
   eval_frequency : 5000 #5000 # Evaluate policy every 5,000 environment steps
   batch_size : 128 #
 
+model:
+  hidden_layers : 2
+  n_hidden : 64
+  learning_rate : 0.005
+  ensemble_size : 5
+  training_iterations : 5000
+  batch_size : 64
+  sars_datafile : 'D:/Carnegie Mellon/Sem II/Project/data/sars_data.csv'
+  save_dir : 'D:/Carnegie Mellon/Sem II/Project/data/model'
+
 environment:
   apoapsis_radius_initial : 7038000
   apoapsis_radius_target : 4096000
