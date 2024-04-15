@@ -1,0 +1,62 @@
+setup:
+  observation_dim : 5
+  action_dim : 11
+  DDQN : True
+  actions : [-1.0, -0.5, -0.3, -0.2, -0.1, 0, 0.1, 0.2, 0.3, 0.5, 1.0]
+  state_headers : ["apoapsis_radius", 
+                  "periapsis_altitude", 
+                  "inclination", 
+                  "AOP", 
+                  "RAAN"]
+
+policies:
+  decay_rate : 66000
+  discount_rate : 0.95
+
+q_network:
+  hidden_dim : 1024
+  hidden_layers : 2
+  activation : ReLU
+  output_activation : Identity
+  target_network_update_frequency : 10000
+  lambda_target_network : 1.0
+  learning_rate : 0.0001
+
+training:
+  train_start_steps : 10000 #500 # Training starts only after 500 steps have been taken
+  train_stop_steps : 300000 # Training stops once 300,000 steps have been taken
+  buffer_size : 20000 # Buffer only stores that latest 20,000 steps
+  train_frequency : 5 # Training occurs once every three steps
+  eval_episodes : 40 # Evaluate over 40 episodes
+  eval_frequency : 5000 #5000 # Evaluate policy every 5,000 environment steps
+  batch_size : 256 #
+
+model:
+  hidden_layers : 2
+  n_hidden : 32
+  learning_rate : 0.008
+  ensemble_size : 10
+  training_iterations : 2000
+  batch_size : 512
+  sars_datafile : 'D:/Carnegie Mellon/Sem II/Project2/data/sars_data.csv'
+  save_dir : 'D:/Carnegie Mellon/Sem II/Project2/data/model'
+
+environment:
+  apoapsis_radius_initial : 10038000
+  apoapsis_radius_target : 4906000
+  periapsis_altitude_initial : 92000
+  apoapsis_radius_dispersion : 2500
+  periapsis_altitude_dispersion : 2500
+  inclination_low : 88.6
+  inclination_high : 98.6
+  raan_low : 110
+  raan_high : 120
+  aop_low : 70
+  aop_high : 90
+  nu_dispersion : 0.025
+
+termination:
+  apoapsis_radius_tolerance : 10000
+  high_altitude : 135000
+  low_altitude : 85000
+
